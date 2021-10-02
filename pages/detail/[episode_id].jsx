@@ -5,6 +5,8 @@ import {
     LeftOutlined
 } from '@ant-design/icons'
 
+import styles from '../../styles/Detail.module.scss'
+
 function Detail({ setPageType, episode_id, reduxMovieList,
     currentMovie, charsNum, planetsNum, starshipsNum, vehiclesNum, speciesNum }) {
     // const [currentMovie, setCurrentMovie] = React.useState({})
@@ -77,31 +79,30 @@ function Detail({ setPageType, episode_id, reduxMovieList,
     }, [])
 
 
-
     return (
 
         <Card title={<a href="/"><LeftOutlined /></a>}>
             <List
-                header={<div style={{ font: "180% Helvetica, sans-serif" }}>{currentMovie.title}</div>}
+                header={<div style={{fontSize: '180%', color: '#222222'}}>{currentMovie.title}</div>}
 
             >
                 <List.Item>
-                    Episode ID: {currentMovie.episode_id}
+                    <label className={styles.labelItem}>Episode ID : </label> <span className={styles.spanItem}>{currentMovie.episode_id}</span> 
                 </List.Item>
                 <List.Item>
-                    Opening Crawl: {currentMovie.opening_crawl}
+                    <label className={styles.labelItem}>Opening Crawl : </label> <span className={styles.spanItem}>{currentMovie.opening_crawl}</span> 
                 </List.Item>
                 <List.Item>
-                    Director: {currentMovie.director}
+                    <label className={styles.labelItem}>Director : </label> <span className={styles.spanItem}>{currentMovie.director}</span>
                 </List.Item>
                 <List.Item>
-                    Producer: {currentMovie.producer}
+                    <label className={styles.labelItem}>Producer : </label> <span className={styles.spanItem}>{currentMovie.producer}</span>
                 </List.Item>
                 <List.Item>
-                    Release Date: {currentMovie.release_date}
+                    <label className={styles.labelItem}>Release Date : </label> <span className={styles.spanItem}>{currentMovie.release_date}</span>
                 </List.Item>
                 <List.Item>
-                    Characters: {charsList.map((char, index) => {
+                    <label className={styles.labelItem}>Characters : </label> {charsList.map((char, index) => {
                         return (
                             <Tooltip
                                 key={index}
@@ -112,29 +113,29 @@ function Detail({ setPageType, episode_id, reduxMovieList,
                                     <div>Gender: {char.gender}</div>
                                     <div>Hair Colour: {char.hair_color}</div>
                                     </div>}>
-                                <span >{char.name}, </span>
+                                <span className={styles.spanItem}>{char.name}, </span>
                             </Tooltip>
                         )
                     })}
                 </List.Item>
                 <List.Item>
-                    Planets: {planetsList.map((planet, index) => {
-                        return <span key={index}>{planet.name}, </span>
+                    <label className={styles.labelItem}>Planets : </label> {planetsList.map((planet, index) => {
+                        return <span key={index} className={styles.spanItem}>{planet.name}, </span>
                     })}
                 </List.Item>
                 <List.Item>
-                    Starships: {starshipsList.map((starship, index) => {
-                        return <span key={index}>{starship.name}, </span>
+                    <label className={styles.labelItem}>Starships : </label> {starshipsList.map((starship, index) => {
+                        return <span key={index} className={styles.spanItem}>{starship.name}, </span>
                     })}
                 </List.Item>
                 <List.Item>
-                    Vehicles: {vehiclesList.map((vehicle, index) => {
-                        return <span key={index}>{vehicle.name}, </span>
+                    <label className={styles.labelItem}>Vehicles : </label> {vehiclesList.map((vehicle, index) => {
+                        return <span key={index} className={styles.spanItem}>{vehicle.name}, </span>
                     })}
                 </List.Item>
                 <List.Item>
-                    Species: {speciesList.map((specie, index) => {
-                        return <span key={index}>{specie.name}, </span>
+                    <label className={styles.labelItem}>Species : </label> {speciesList.map((specie, index) => {
+                        return <span key={index} className={styles.spanItem}>{specie.name}, </span>
                     })}
                 </List.Item>
             </List>

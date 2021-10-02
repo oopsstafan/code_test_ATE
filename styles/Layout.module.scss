@@ -1,0 +1,41 @@
+$fontColor: #FDFE6C;
+$backgroudColor: #222222;
+
+.container {
+    min-height: 60vh;
+    height: 100vh;
+    width: 60vw;
+    margin: 0 auto;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    
+
+    .header_wrapper{
+        height: 20vh;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        background-color: $backgroudColor;
+
+        h1{
+            text-align: center;
+            color: $fontColor;
+            font: 250%;
+        }
+        h2{
+            color: #CACACA;
+            text-align: center;
+        }
+    }
+    
+
+
+    .footer_wrapper{
+        text-align: center;
+        // height: 10vh;
+        line-height: 10vh;
+        color: $fontColor;
+        background-color: $backgroudColor;
+    }
+}
