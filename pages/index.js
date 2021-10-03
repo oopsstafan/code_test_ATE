@@ -14,13 +14,14 @@ import styles from '../styles/Home.module.scss'
 const { confirm } = Modal
 function Home({ data, setPageType }) {
   const [movieList, setMovieList] = React.useState([])
-  const [searchResult, setSearchResult] = React.useState([])
-  const [isSearching, setIsSearching] = React.useState(false)
+  const [allMovieList, setAllMovieList] = React.useState([])
   React.useEffect(() => {
     setPageType('home')
     let localMovieList = JSON.parse(localStorage.getItem('localMovieList'))
-    if (localMovieList) setMovieList(localMovieList)
-    else {
+    if (localMovieList) {
+      setMovieList(localMovieList)
+      setAllMovieList(localMovieList)
+    } else {
       getInitList()
     }
   }, [])
@@ -29,25 +30,29 @@ function Home({ data, setPageType }) {
       return { ...movie, fav: false }
     })
     setMovieList(newArr)
+    setAllMovieList(newArr)
   }
 
   const handleSearch = async (e) => {
-    setIsSearching(true)
     const result = movieList.find(movie => {
       return movie.episode_id * 1 === e.keyword * 1
 
     })
-    setSearchResult([result])
+    setMovieList([result])
   }
   const handleInpChange = (e) => {
     if (!e.target.value) {
-      getInitList()
-      setSearchResult([])
-      setIsSearching(false)
+      setMovieList([...allMovieList])
     }
   }
   const handleFav = (movie) => {
-    let newArr = (isSearching ? searchResult : movieList).map((item) => {
+    let newArr = movieList.map((item) => {
+      if (movie.episode_id === item.episode_id) {
+        if (movie.fav) return { ...item, fav: false }
+        else return { ...item, fav: true }
+      } else return { ...item }
+    })
+    let newArrAll = allMovieList.map((item) => {
       if (movie.episode_id === item.episode_id) {
         if (movie.fav) return { ...item, fav: false }
         else return { ...item, fav: true }
@@ -56,11 +61,14 @@ function Home({ data, setPageType }) {
     let favArr = newArr.filter(item => item.fav)
     let nonfavArr = newArr.filter(item => !item.fav)
     let finalArr = [...favArr, ...nonfavArr]
-    console.log(finalArr)
-    localStorage.setItem('localMovieList', JSON.stringify(finalArr))
-    // setMovieList(finalArr)
-    if (isSearching) setSearchResult(finalArr)
+    
+    let favArrAll = newArrAll.filter(item => item.fav)
+    let nonfavArrAll = newArrAll.filter(item => !item.fav)
+    let finalArrAll = [...favArrAll, ...nonfavArrAll]
+
+    localStorage.setItem('localMovieList', JSON.stringify(finalArrAll))
     setMovieList(finalArr)
+    setAllMovieList(finalArrAll)
 
   }
 
@@ -71,12 +79,6 @@ function Home({ data, setPageType }) {
       content: "All favourite movies will be reset and localstorage will be cleared",
       onOk: () => {
         localStorage.clear()
-        if (isSearching) {
-          let result = searchResult.map(movie => {
-            return { ...movie, fav: false }
-          })
-          setSearchResult(result)
-        }
         getInitList()
         return
       },
@@ -86,7 +88,7 @@ function Home({ data, setPageType }) {
     })
   }
 
-  const dataSource = isSearching ? searchResult : movieList
+  const dataSource = movieList
 
   const columns = [
     {
