@@ -1,15 +1,14 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Button, Card, Select, message, Modal, List, Typography, Tooltip } from 'antd'
+import Link from 'next/link'
+import { Card, List, Tooltip } from 'antd'
 import {
     LeftOutlined
 } from '@ant-design/icons'
 
 import styles from '../../styles/Detail.module.scss'
 
-function Detail({ setPageType, episode_id, reduxMovieList,
+function Detail({ setPageType, episode_id,
     currentMovie, charsNum, planetsNum, starshipsNum, vehiclesNum, speciesNum }) {
-    // const [currentMovie, setCurrentMovie] = React.useState({})
     const [charsList, setCharsList] = React.useState([])
     const [planetsList, setPlanetsList] = React.useState([])
     const [starshipsList, setStarshipsList] = React.useState([])
@@ -17,13 +16,6 @@ function Detail({ setPageType, episode_id, reduxMovieList,
     const [speciesList, setSpeciesList] = React.useState([])
     React.useEffect(() => {
         setPageType("detail")
-        // if (reduxMovieList.length === 0) getCurrentMovie()
-        // else {
-        //     const result = reduxMovieList.find(movie => {
-        //         return movie.episode_id === episode_id * 1
-        //     })
-        //     setCurrentMovie(result)
-        // }
 
         const getChar = async item => {
             return await fetch(`https://swapi.dev/api/people/${item}`).
@@ -81,7 +73,7 @@ function Detail({ setPageType, episode_id, reduxMovieList,
 
     return (
 
-        <Card title={<a href="/"><LeftOutlined /></a>}>
+        <Card title={<Link href="/"><LeftOutlined /></Link>}>
             <List
                 header={<div style={{fontSize: '180%', color: '#222222'}}>{currentMovie.title}</div>}
 
@@ -188,8 +180,4 @@ export const getServerSideProps = async (context) => {
         }
     }
 }
-export default connect(
-    state => ({ reduxMovieList: state }),
-    {
-    }
-)(Detail)
+export default Detail

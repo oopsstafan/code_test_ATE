@@ -1,8 +1,6 @@
 import React from 'react'
 
 import Link from 'next/link'
-import { saveMovieListAction } from '../redux/action_types'
-import { connect } from 'react-redux'
 import { Button, Card, Table, Input, Form, message, Modal } from 'antd'
 import {
   StarOutlined,
@@ -14,7 +12,7 @@ import {
 import styles from '../styles/Home.module.scss'
 
 const { confirm } = Modal
-function Home({ data, setPageType, saveMovieList }) {
+function Home({ data, setPageType }) {
   const [movieList, setMovieList] = React.useState([])
   const [searchResult, setSearchResult] = React.useState([])
   const [isSearching, setIsSearching] = React.useState(false)
@@ -25,7 +23,6 @@ function Home({ data, setPageType, saveMovieList }) {
     else {
       getInitList()
     }
-    saveMovieList(data)
   }, [])
   const getInitList = () => {
     const newArr = data.map((movie) => {
@@ -194,9 +191,4 @@ export const getStaticProps = async (context) => {
   }
 }
 
-export default connect(
-  state => ({}),
-  {
-    saveMovieList: saveMovieListAction
-  }
-)(Home)
+export default Home
