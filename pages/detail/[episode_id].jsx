@@ -7,8 +7,10 @@ import {
 
 import styles from '../../styles/Detail.module.scss'
 
+//This component is used to show movie details info
 function Detail({ setPageType, episode_id,
     currentMovie, charsNum, planetsNum, starshipsNum, vehiclesNum, speciesNum }) {
+    //init state to store all the needed info as array
     const [charsList, setCharsList] = React.useState([])
     const [planetsList, setPlanetsList] = React.useState([])
     const [starshipsList, setStarshipsList] = React.useState([])
@@ -17,6 +19,7 @@ function Detail({ setPageType, episode_id,
     React.useEffect(() => {
         setPageType("detail")
 
+        //use promise to get info from different APIs, using different num got from props
         const getChar = async item => {
             return await fetch(`https://swapi.dev/api/people/${item}`).
                 then(res => res.json())
@@ -144,9 +147,15 @@ export const getServerSideProps = async (context) => {
     const { params } = context
     const result = await fetch("https://swapi.dev/api/films").
         then(res => res.json())
+    
+    //find current picked movie in all films list
     const currentMovie = result.results.find(movie => {
         return movie.episode_id === params.episode_id * 1
     })
+    /*
+        find all characters', planets', starships', etc,  last digit of url, save them in props of component,
+        so that can get more info by other API
+    */
     currentMovie.characters.map((char, index) => {
         const arr = char.split('/')
         charsNum.push(arr[5])

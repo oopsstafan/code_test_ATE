@@ -12,19 +12,27 @@ import {
 import styles from '../styles/Home.module.scss'
 
 const { confirm } = Modal
+//This is home page
 function Home({ data, setPageType }) {
+  //movieList is used for store the info that showing on page
   const [movieList, setMovieList] = React.useState([])
+  //allMovieList is used for store all movie info with updated "favourite" info
   const [allMovieList, setAllMovieList] = React.useState([])
   React.useEffect(() => {
     setPageType('home')
+    //read the localstorage 
     let localMovieList = JSON.parse(localStorage.getItem('localMovieList'))
+    //If there is localstorage, set movieList and all movieList so that page can properly show info even when user refresh page
     if (localMovieList) {
       setMovieList(localMovieList)
       setAllMovieList(localMovieList)
     } else {
+
+      //if no localstorage, init page and get new movie info list
       getInitList()
     }
   }, [])
+  //init movie list, get movie list from API
   const getInitList = () => {
     const newArr = data.map((movie) => {
       return { ...movie, fav: false }
@@ -32,20 +40,24 @@ function Home({ data, setPageType }) {
     setMovieList(newArr)
     setAllMovieList(newArr)
   }
-
+  //handle list search
   const handleSearch = async (e) => {
     const result = movieList.find(movie => {
       return movie.episode_id * 1 === e.keyword * 1
 
     })
+    //set new movie list so UI can update properly
     setMovieList([result])
   }
+  //handle users reset the search input
   const handleInpChange = (e) => {
     if (!e.target.value) {
       setMovieList([...allMovieList])
     }
   }
+  //handle user update favourite info
   const handleFav = (movie) => {
+    //update the movieList and allMovieList and make sure they store the updated movie info
     let newArr = movieList.map((item) => {
       if (movie.episode_id === item.episode_id) {
         if (movie.fav) return { ...item, fav: false }
@@ -65,20 +77,25 @@ function Home({ data, setPageType }) {
     let favArrAll = newArrAll.filter(item => item.fav)
     let nonfavArrAll = newArrAll.filter(item => !item.fav)
     let finalArrAll = [...favArrAll, ...nonfavArrAll]
-
+    /*
+      store all the updated info(favourite info included) to localstorage so that 
+      info won't lost if user refresh the page
+    */
     localStorage.setItem('localMovieList', JSON.stringify(finalArrAll))
     setMovieList(finalArr)
     setAllMovieList(finalArrAll)
 
   }
-
+  //reset all the favourite status.
   const handleReset = () => {
     confirm({
       title: "Do you want to reset?",
       icon: <ExclamationCircleOutlined />,
       content: "All favourite movies will be reset and localstorage will be cleared",
       onOk: () => {
+        //clear localstorage
         localStorage.clear()
+        //re-init and reset the movieList
         getInitList()
         return
       },
@@ -87,7 +104,8 @@ function Home({ data, setPageType }) {
       }
     })
   }
-
+  
+  //show movieList state on the page
   const dataSource = movieList
 
   const columns = [
